@@ -17,9 +17,6 @@ import { getUrl } from "aws-amplify/storage";
 import { uploadData } from "aws-amplify/storage";
 import { generateClient } from "aws-amplify/data";
 import outputs from "../amplify_outputs.json";
-/**
- * @type {import('aws-amplify/data').Client<import('../amplify/data/resource').Schema>}
- */
 
 Amplify.configure(outputs);
 const client = generateClient({
@@ -41,20 +38,17 @@ export default function App() {
           const linkToStorageFile = await getUrl({
             path: ({ identityId }) => `media/${identityId}/${note.image}`,
           });
-          console.log(linkToStorageFile.url);
           note.image = linkToStorageFile.url;
         }
         return note;
       })
     );
-    console.log(notes);
     setNotes(notes);
   }
 
   async function createNote(event) {
     event.preventDefault();
     const form = new FormData(event.target);
-    console.log(form.get("image").name);
 
     const { data: newNote } = await client.models.Note.create({
       name: form.get("name"),
@@ -62,34 +56,34 @@ export default function App() {
       image: form.get("image").name,
     });
 
-    console.log(newNote);
     if (newNote.image)
-      if (newNote.image)
-        await uploadData({
-          path: ({ identityId }) => `media/${identityId}/${newNote.image}`,
-
-          data: form.get("image"),
-        }).result;
+      await uploadData({
+        path: ({ identityId }) => `media/${identityId}/${newNote.image}`,
+        data: form.get("image"),
+      }).result;
 
     fetchNotes();
     event.target.reset();
   }
 
   async function deleteNote({ id }) {
-    const toBeDeletedNote = {
-      id: id,
-    };
+    const toBeDeletedNote = { id };
 
-    const { data: deletedNote } = await client.models.Note.delete(
-      toBeDeletedNote
-    );
-    console.log(deletedNote);
+    await client.models.Note.delete(toBeDeletedNote);
 
     fetchNotes();
   }
 
   return (
-    <Authenticator>
+    <Authenticator
+      components={{
+        SignIn: {
+          Header() {
+            return <Heading level={3}>Welcome to the Online Notes App</Heading>;
+          },
+        },
+      }}
+    >
       {({ signOut }) => (
         <Flex
           className="App"
@@ -99,7 +93,7 @@ export default function App() {
           width="70%"
           margin="0 auto"
         >
-          <Heading level={1}>My Notes App</Heading>
+          <Heading level={1}>My Notes</Heading>
           <View as="form" margin="3rem 0" onSubmit={createNote}>
             <Flex
               direction="column"
@@ -130,7 +124,6 @@ export default function App() {
                 alignSelf={"end"}
                 accept="image/png, image/jpeg"
               />
-
               <Button type="submit" variation="primary">
                 Create Note
               </Button>
@@ -164,7 +157,7 @@ export default function App() {
                 {note.image && (
                   <Image
                     src={note.image}
-                    alt={`visual aid for ${notes.name}`}
+                    alt={`visual aid for ${note.name}`}
                     style={{ width: 400 }}
                   />
                 )}
