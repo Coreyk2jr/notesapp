@@ -101,7 +101,7 @@ export default function App() {
           width="70%"
           margin="0 auto"
         >
-          <Heading level={1}>My Notes</Heading>
+          <Heading level={1}>New Note</Heading>
           <View as="form" margin="3rem 0" onSubmit={createNote}>
             <Flex
               direction="column"
@@ -138,7 +138,7 @@ export default function App() {
             </Flex>
           </View>
           <Divider />
-          <Heading level={2}>Current Notes</Heading>
+          <Heading level={2}>My Notes</Heading>
           <Grid
             margin="3rem 0"
             autoFlow="column"
