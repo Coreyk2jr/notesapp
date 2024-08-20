@@ -56,21 +56,19 @@ export default function App() {
       image: form.get("image").name,
     });
 
-    if (newNote.image)
+    if (newNote.image) {
       await uploadData({
         path: ({ identityId }) => `media/${identityId}/${newNote.image}`,
         data: form.get("image"),
       }).result;
+    }
 
     fetchNotes();
     event.target.reset();
   }
 
   async function deleteNote({ id }) {
-    const toBeDeletedNote = { id };
-
-    await client.models.Note.delete(toBeDeletedNote);
-
+    await client.models.Note.delete({ id });
     fetchNotes();
   }
 
@@ -79,7 +77,17 @@ export default function App() {
       components={{
         SignIn: {
           Header() {
-            return <Heading level={3}>Welcome to the Online Notes App</Heading>;
+            return (
+              <Flex
+                direction="column"
+                alignItems="center"
+                margin="1rem 0"
+              >
+                <Heading level={3} textAlign="center">
+                  Welcome to the Online Notes App
+                </Heading>
+              </Flex>
+            );
           },
         },
       }}
