@@ -19,7 +19,6 @@ import { generateClient } from "aws-amplify/data";
 import outputs from "../amplify_outputs.json";
 import './App.css'; // Import the CSS file
 
-
 Amplify.configure(outputs);
 const client = generateClient({
   authMode: "userPool",
@@ -45,6 +44,10 @@ export default function App() {
         return note;
       })
     );
+
+    // Sort notes by creationDate (assuming notes have a creationDate field)
+    notes.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+
     setNotes(notes);
   }
 
@@ -87,7 +90,7 @@ export default function App() {
                   margin="1rem 0"
                 >
                   <Heading level={1} textAlign="center">
-                  CloudNotes 
+                    CloudNotes
                   </Heading>
                 </Flex>
               );
@@ -137,20 +140,22 @@ export default function App() {
                   as="input"
                   type="file"
                   alignSelf={"end"}
-                  accept="image/png, image/jpeg"
+                  accept="image/png, image/jpeg, video/mp4, video/mov, video/avi, video/mkv, video/webm"
                 />
-                <Button type="submit" variation="primary"
-                style={{
-                  backgroundColor: "#047d95",  
-                  color: "#FFFFFF",            
-                  border: "none",              
-                  padding: "10px 20px",        
-                  borderRadius: "5px",  
-                  borderWidth: '3px', 
-                  borderColor: '#000000', 
-                  borderStyle: 'solid',        
-                }}
-              >
+                <Button
+                  type="submit"
+                  variation="primary"
+                  style={{
+                    backgroundColor: "#047d95",
+                    color: "#FFFFFF",
+                    border: "none",
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    borderWidth: '3px',
+                    borderColor: '#000000',
+                    borderStyle: 'solid',
+                  }}
+                >
                   Create Note
                 </Button>
               </Flex>
@@ -190,21 +195,31 @@ export default function App() {
                   <Button
                     variation="destructive"
                     onClick={() => deleteNote(note)}
+                    style={{
+                      backgroundColor: '#FF0000',
+                      borderWidth: '3px',
+                      borderColor: '#000000',
+                      borderStyle: 'solid',
+                      color: "#FFFFFF",
+                    }}
                   >
                     Delete note
                   </Button>
                 </Flex>
               ))}
             </Grid>
-            <Button onClick={signOut}
-            style={{
-              backgroundColor:'#047d95',
-              borderWidth: '3px', 
-              borderColor: '#000000', 
-              borderStyle: 'solid',
-              color: "#FFFFFF",
-            }}
-          >Sign Out</Button>
+            <Button
+              onClick={signOut}
+              style={{
+                backgroundColor: '#047d95',
+                borderWidth: '3px',
+                borderColor: '#000000',
+                borderStyle: 'solid',
+                color: "#FFFFFF",
+              }}
+            >
+              Sign Out
+            </Button>
           </Flex>
         )}
       </Authenticator>
