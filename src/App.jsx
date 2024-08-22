@@ -111,7 +111,7 @@ export default function App() {
                 justifyContent="center"
                 gap="3rem"
                 padding="3rem"
-                border="3px solid #FFFFFF"
+                border="4px solid #FFFFFF"
                 borderRadius="5%"
               >
                 <TextField
@@ -171,9 +171,9 @@ export default function App() {
                   justifyContent="center"
                   alignItems="center"
                   gap="2rem"
-                  border="3px solid #FFFFFF"
+                  border="4px solid #FFFFFF"
                   padding="2rem"
-                  borderRadius="5%"
+                  borderRadius="0%"
                   className="box"
                 >
                   <View>
